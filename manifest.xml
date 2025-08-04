@@ -5,7 +5,7 @@
   <ProviderName>Nutrient.io</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Nutrient PDF Tools"/>
-  <Description DefaultValue="PDF conversion, redaction, OCR &amp; accessibility tools via Nutrient.io DWS APIs"/>
+  <Description DefaultValue="PDF conversion, redaction, OCR &amp; accessibility tools via Nutrient DWS APIs"/>
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png"/>
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-64.png"/>
   <SupportUrl DefaultValue="https://www.nutrient.io/support"/>
@@ -74,7 +74,7 @@
       <bt:ShortStrings>
         <bt:String id="GetStarted.Title" DefaultValue="Get started with Nutrient PDF Tools!"/>
         <bt:String id="CommandsGroup.Label" DefaultValue="Nutrient PDF Tools"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="PDF Tools"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Nutrient PDF Tools"/>
       </bt:ShortStrings>
       <bt:LongStrings>
         <bt:String id="GetStarted.Description" DefaultValue="Your Nutrient PDF Tools add-in loaded successfully. Go to the HOME tab and click the 'PDF Tools' button to start converting PDFs to DOCX."/>

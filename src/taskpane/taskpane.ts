@@ -208,7 +208,7 @@ async function convertPdfToDocx(file: File, ocrEnabled: boolean, language: strin
     formData.append('file', file);
 
     // Prepare the API payload according to Nutrient.io Build API specification
-    const payload = {
+    const payload: any = {
         parts: [{ file: 'document' }],
         ocr: ocrEnabled,
         output: { type: 'docx' }
@@ -221,27 +221,66 @@ async function convertPdfToDocx(file: File, ocrEnabled: boolean, language: strin
 
     formData.append('instructions', JSON.stringify(payload));
 
-    const response = await fetch(`${NUTRIENT_API_BASE}/build`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${PROCESSOR_API_KEY}`
-        },
-        body: formData
-    });
+    // Log the request details
+    addDebugLog('=== API REQUEST LOG ===');
+    addDebugLog(`URL: ${NUTRIENT_API_BASE}/build`);
+    addDebugLog('Method: POST');
+    addDebugLog(`Headers: Authorization: Bearer ${PROCESSOR_API_KEY.substring(0, 10)}...`);
+    addDebugLog(`Payload: ${JSON.stringify(payload, null, 2)}`);
+    addDebugLog(`File: ${file.name} (${file.size} bytes, ${file.type})`);
 
-    if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
+    // Show request details in UI
+    showStatus(`Making API request to ${NUTRIENT_API_BASE}/build...`, 'info');
+
+    try {
+        const response = await fetch(`${NUTRIENT_API_BASE}/build`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${PROCESSOR_API_KEY}`
+            },
+            body: formData
+        });
+
+        // Log the response details
+        addDebugLog('=== API RESPONSE LOG ===');
+        addDebugLog(`Status: ${response.status}`);
+        addDebugLog(`Status Text: ${response.statusText}`);
+        addDebugLog(`Headers: ${response.headers}`);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            addDebugLog(`Error Response Body: ${errorText}`);
+            
+            // Show detailed error in UI
+            showStatus(`API Error ${response.status}: ${response.statusText} - ${errorText}`, 'error');
+            throw new Error(`API request failed: ${response.status} ${response.statusText} - ${errorText}`);
+        }
+
+        const blob = await response.blob();
+        addDebugLog(`Response Blob: ${blob.size} bytes, type: ${blob.type}`);
+
+        // Show success in UI
+        showStatus(`API request successful! Received ${blob.size} bytes`, 'success');
+        
+        return blob;
+    } catch (error) {
+        addDebugLog('=== API ERROR LOG ===');
+        addDebugLog(`Error: ${error}`);
+        addDebugLog(`Error type: ${typeof error}`);
+        addDebugLog(`Error message: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        
+        // Show detailed error in UI
+        showStatus(`Network Error: ${error instanceof Error ? error.message : 'Unknown error'}`, 'error');
+        throw error;
     }
-
-    return await response.blob();
 }
 
 async function insertDocxIntoWord(docxBlob: Blob) {
     return Word.run(async (context) => {
         // Convert blob to base64
         const arrayBuffer = await docxBlob.arrayBuffer();
-        const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+        const uint8Array = new Uint8Array(arrayBuffer);
+        const base64 = btoa(String.fromCharCode.apply(null, Array.from(uint8Array)));
 
         // Insert the document at the current cursor position
         const range = context.document.getSelection();
@@ -286,6 +325,27 @@ function showStatus(message: string, type: 'success' | 'error' | 'info') {
             }
         }, 5000);
     }
+}
+
+function addDebugLog(message: string) {
+    const debugSection = document.getElementById('debug-section') as HTMLElement;
+    const debugLog = document.getElementById('debug-log') as HTMLElement;
+    
+    // Show debug section if hidden
+    debugSection.style.display = 'block';
+    
+    // Add timestamp
+    const timestamp = new Date().toLocaleTimeString();
+    const logEntry = `[${timestamp}] ${message}\n`;
+    
+    // Add to debug log
+    debugLog.textContent += logEntry;
+    
+    // Scroll to bottom
+    debugLog.scrollTop = debugLog.scrollHeight;
+    
+    // Also log to console
+    console.log(message);
 }
 
 function resetFileSelection() {
