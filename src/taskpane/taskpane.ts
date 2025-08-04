@@ -386,6 +386,15 @@ function addDebugLog(message: string) {
     } catch (err) {
         console.error('Failed to store log in localStorage:', err);
     }
+    
+    // Send to logging server
+    fetch('http://localhost:3001/api/log', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message })
+    }).catch(err => console.error('Failed to send log to server:', err));
 }
 
 function resetFileSelection() {
