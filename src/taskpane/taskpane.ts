@@ -209,7 +209,6 @@ async function handleConvert() {
 
 async function convertPdfToDocx(file: File, ocrEnabled: boolean, language: string): Promise<Blob> {
     const formData = new FormData();
-    formData.append('file', file);
 
     // Prepare the API payload according to Nutrient.io Build API specification
     const payload: any = {
