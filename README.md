@@ -36,7 +36,6 @@ A Microsoft Word Add-in that integrates with Nutrient.io's Document Workflow Ser
 ### 1. Install Dependencies
 
 ```bash
-cd "Nutrient.io DWS Tools"
 npm install
 ```
 
@@ -85,7 +84,7 @@ This will:
 ### Project Structure
 
 ```
-Nutrient.io DWS Tools/
+word-nutrient-dwsapi/
 ├── src/
 │   ├── taskpane/
 │   │   ├── taskpane.html      # Main UI
