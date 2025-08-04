@@ -1,0 +1,113 @@
+<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
+<!-- This file shows how to design a first-run page that provides a welcome screen to the user about the features of the add-in. -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Nutrient PDF Tools</title>
+
+    <!-- Office JavaScript API -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+
+    <!-- Template styles -->
+    <link href="taskpane.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="ms-welcome">
+    <!-- Header -->
+    <header class="ms-welcome__header">
+        <img src="../../assets/logo-filled.png" alt="Nutrient.io" title="Nutrient PDF Tools" />
+        <h1>PDF Tools</h1>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="ms-welcome__main">
+        <!-- PDF Import Section -->
+        <section class="feature-section">
+            <h2>Import from PDF to DOCX</h2>
+            
+            <!-- File Upload Area -->
+            <div class="upload-area">
+                <div id="drag-drop-zone" class="drag-drop-zone" role="button" tabindex="0" aria-label="Upload PDF file">
+                    <i class="ms-Icon ms-Icon--Upload"></i>
+                    <p>Drag & drop PDF here or click to browse</p>
+                    <input type="file" id="file-input" accept=".pdf" style="display: none;" aria-label="Select PDF file" />
+                </div>
+                <div id="file-info" class="file-info" style="display: none;" role="status" aria-live="polite">
+                    <p id="file-name"></p>
+                    <p id="file-size"></p>
+                </div>
+            </div>
+
+            <!-- Options -->
+            <div class="options-section">
+                <div class="option-item">
+                    <label for="ocr-toggle">
+                        <input type="checkbox" id="ocr-toggle" checked />
+                        <span>Enable OCR processing</span>
+                    </label>
+                </div>
+                
+                <div class="option-item">
+                    <label for="language-select">Language:</label>
+                    <select id="language-select" aria-label="Select language for OCR processing">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="auto">Auto-detect</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Convert Button -->
+            <div class="action-section">
+                <button id="convert-btn" class="ms-Button ms-Button--primary" disabled>
+                    <span class="ms-Button-label">Convert & Insert</span>
+                </button>
+            </div>
+
+            <!-- Progress -->
+            <div id="progress-section" class="progress-section" style="display: none;" role="progressbar" aria-label="Conversion progress">
+                <div class="ms-ProgressIndicator">
+                    <div class="ms-ProgressIndicator-itemProgress">
+                        <div class="ms-ProgressIndicator-progressTrack">
+                            <div id="progress-bar" class="ms-ProgressIndicator-progressBar"></div>
+                        </div>
+                    </div>
+                    <div class="ms-ProgressIndicator-itemDescription">
+                        <span id="progress-text">Converting PDF...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Messages -->
+            <div id="status-messages" class="status-messages" role="status" aria-live="polite"></div>
+        </section>
+
+        <!-- Future Features -->
+        <section class="feature-section future-features">
+            <h3>Coming Soon</h3>
+            <ul class="ms-List">
+                <li class="ms-ListItem">
+                    <i class="ms-Icon ms-Icon--Shield"></i>
+                    <span>Document Redaction</span>
+                </li>
+                <li class="ms-ListItem">
+                    <i class="ms-Icon ms-Icon--PDF"></i>
+                    <span>Export to PDF/A or PDF/UA</span>
+                </li>
+                <li class="ms-ListItem">
+                    <i class="ms-Icon ms-Icon--Share"></i>
+                    <span>Send to SharePoint/Teams</span>
+                </li>
+            </ul>
+        </section>
+    </main>
+</body>
+
+</html>

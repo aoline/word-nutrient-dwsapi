@@ -1,0 +1,379 @@
+/* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. */
+
+/* Reset and Base Styles */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    background: #f8f9fa;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Main Container */
+.ms-welcome {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f8f9fa;
+    padding: 16px;
+}
+
+/* Header Section */
+.ms-welcome__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+    margin-bottom: 16px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.ms-welcome__header img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+}
+
+.ms-welcome__header h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    letter-spacing: -0.025em;
+}
+
+/* Main Content */
+.ms-welcome__main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 16px;
+}
+
+/* Feature Section */
+.feature-section {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+}
+
+.feature-section h2 {
+    margin: 0 0 20px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feature-section h2::before {
+    content: "📥";
+    font-size: 18px;
+}
+
+/* Upload Area */
+.upload-area {
+    margin-bottom: 24px;
+}
+
+.drag-drop-zone {
+    border: 2px dashed #dee2e6;
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #f8f9fa;
+    position: relative;
+}
+
+.drag-drop-zone:hover {
+    border-color: #0078d4;
+    background: #f0f6ff;
+}
+
+.drag-drop-zone.dragover {
+    border-color: #0078d4;
+    background: #e6f3ff;
+    transform: scale(1.01);
+}
+
+.drag-drop-zone i {
+    font-size: 32px;
+    color: #6c757d;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.drag-drop-zone p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* File Info */
+.file-info {
+    background: #e6f3ff;
+    border: 1px solid #b3d9ff;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+}
+
+.file-info p {
+    margin: 4px 0;
+    font-size: 13px;
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+/* Options Section */
+.options-section {
+    margin-bottom: 24px;
+}
+
+.option-item {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.option-item:last-child {
+    margin-bottom: 0;
+}
+
+.option-item label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 500;
+}
+
+.option-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #0078d4;
+}
+
+.option-item select {
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+    min-width: 120px;
+    color: #1a1a1a;
+    transition: border-color 0.2s ease;
+}
+
+.option-item select:focus {
+    outline: none;
+    border-color: #0078d4;
+    box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+}
+
+/* Action Section */
+.action-section {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.ms-Button--primary {
+    background: #0078d4;
+    border: none;
+    color: white;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 160px;
+    box-shadow: 0 2px 4px rgba(0, 120, 212, 0.2);
+}
+
+.ms-Button--primary:hover:not(:disabled) {
+    background: #106ebe;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 120, 212, 0.3);
+}
+
+.ms-Button--primary:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 120, 212, 0.2);
+}
+
+.ms-Button--primary:disabled {
+    background: #dee2e6;
+    color: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Progress Section */
+.progress-section {
+    margin-bottom: 16px;
+}
+
+.ms-ProgressIndicator {
+    width: 100%;
+}
+
+.ms-ProgressIndicator-itemProgress {
+    margin-bottom: 8px;
+}
+
+.ms-ProgressIndicator-progressTrack {
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.ms-ProgressIndicator-progressBar {
+    height: 100%;
+    background: linear-gradient(90deg, #0078d4, #106ebe);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 3px;
+}
+
+.ms-ProgressIndicator-itemDescription {
+    font-size: 13px;
+    color: #6c757d;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* Status Messages */
+.status-messages {
+    margin-top: 16px;
+}
+
+.status-message {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    border-left: 4px solid;
+}
+
+.status-message.success {
+    background: #d4edda;
+    border-left-color: #28a745;
+    color: #155724;
+}
+
+.status-message.error {
+    background: #f8d7da;
+    border-left-color: #dc3545;
+    color: #721c24;
+}
+
+.status-message.info {
+    background: #d1ecf1;
+    border-left-color: #17a2b8;
+    color: #0c5460;
+}
+
+/* Future Features */
+.future-features {
+    opacity: 0.6;
+    margin-top: 16px;
+}
+
+.future-features h3 {
+    color: #6c757d;
+    margin-bottom: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.future-features .ms-List {
+    list-style: none;
+}
+
+.future-features .ms-ListItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    padding: 8px 0;
+}
+
+.future-features .ms-ListItem i {
+    color: #6c757d;
+    width: 16px;
+    font-size: 14px;
+}
+
+.future-features .ms-ListItem span {
+    color: #6c757d;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 400px) {
+    .ms-welcome {
+        padding: 12px;
+    }
+    
+    .ms-welcome__header {
+        padding: 20px 16px;
+    }
+    
+    .feature-section {
+        padding: 20px;
+    }
+    
+    .drag-drop-zone {
+        padding: 24px 16px;
+    }
+}
+
+/* Smooth animations */
+* {
+    transition: all 0.2s ease;
+}
+
+/* Focus states for accessibility */
+button:focus,
+select:focus,
+input:focus {
+    outline: 2px solid #0078d4;
+    outline-offset: 2px;
+}

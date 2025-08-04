@@ -1,0 +1,40 @@
+# Node / React build
+node_modules/
+build/
+dist/
+*.log
+*.env
+.env.*
+
+# Office Add-in manifest & sideload files
+*.sideload
+*.manifest.json
+
+# Editor/OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Test artifacts
+coverage/
+*.test.js.snap
+
+# System logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore temporary files
+*.swp
+*.bak
+*.tmp
+
+# Do not commit API keys or secrets
+*.key
+*.pem
+secrets.*
+credentials.*
+
+# VS Code launch config
+.vscode/launch.json
