@@ -38,8 +38,7 @@ function initializeApp() {
     // Initialize options
     initializeOptions();
     
-    // Initialize export logs
-    initializeExportLogs();
+
 }
 
 function initializeDragAndDrop() {
@@ -83,33 +82,7 @@ function initializeOptions() {
     // Additional initialization can be added here if needed
 }
 
-function initializeExportLogs() {
-    const exportBtn = document.getElementById('export-logs-btn') as HTMLButtonElement;
-    if (exportBtn) {
-        exportBtn.addEventListener('click', exportLogsToFile);
-    }
-}
 
-function exportLogsToFile() {
-    try {
-        const logs = localStorage.getItem('api-debug-logs') || 'No logs found';
-        const blob = new Blob([logs], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `api-debug-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.log`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        showStatus('Logs exported successfully!', 'success');
-    } catch (error) {
-        console.error('Failed to export logs:', error);
-        showStatus('Failed to export logs', 'error');
-    }
-}
 
 function preventDefaults(e: Event) {
     e.preventDefault();
@@ -251,14 +224,7 @@ async function convertPdfToDocx(file: File, ocrEnabled: boolean, language: strin
     }
 
     formData.append('instructions', JSON.stringify(payload));
-
-    // Log the request details
-    addDebugLog('=== API REQUEST LOG ===');
-    addDebugLog(`URL: ${NUTRIENT_API_BASE}/build`);
-    addDebugLog('Method: POST');
-    addDebugLog(`Headers: Authorization: Bearer ${PROCESSOR_API_KEY.substring(0, 10)}...`);
-    addDebugLog(`Payload: ${JSON.stringify(payload, null, 2)}`);
-    addDebugLog(`File: ${file.name} (${file.size} bytes, ${file.type})`);
+    formData.append('document', file);
 
     // Show request details in UI
     showStatus(`Making API request to ${NUTRIENT_API_BASE}/build...`, 'info');
@@ -272,15 +238,8 @@ async function convertPdfToDocx(file: File, ocrEnabled: boolean, language: strin
             body: formData
         });
 
-        // Log the response details
-        addDebugLog('=== API RESPONSE LOG ===');
-        addDebugLog(`Status: ${response.status}`);
-        addDebugLog(`Status Text: ${response.statusText}`);
-        addDebugLog(`Headers: ${response.headers}`);
-
         if (!response.ok) {
             const errorText = await response.text();
-            addDebugLog(`Error Response Body: ${errorText}`);
             
             // Show detailed error in UI
             showStatus(`API Error ${response.status}: ${response.statusText} - ${errorText}`, 'error');
@@ -288,18 +247,12 @@ async function convertPdfToDocx(file: File, ocrEnabled: boolean, language: strin
         }
 
         const blob = await response.blob();
-        addDebugLog(`Response Blob: ${blob.size} bytes, type: ${blob.type}`);
 
         // Show success in UI
         showStatus(`API request successful! Received ${blob.size} bytes`, 'success');
         
         return blob;
     } catch (error) {
-        addDebugLog('=== API ERROR LOG ===');
-        addDebugLog(`Error: ${error}`);
-        addDebugLog(`Error type: ${typeof error}`);
-        addDebugLog(`Error message: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        
         // Show detailed error in UI
         showStatus(`Network Error: ${error instanceof Error ? error.message : 'Unknown error'}`, 'error');
         throw error;
@@ -358,44 +311,7 @@ function showStatus(message: string, type: 'success' | 'error' | 'info') {
     }
 }
 
-function addDebugLog(message: string) {
-    const debugSection = document.getElementById('debug-section') as HTMLElement;
-    const debugLog = document.getElementById('debug-log') as HTMLElement;
-    
-    // Show debug section if hidden
-    debugSection.style.display = 'block';
-    
-    // Add timestamp
-    const timestamp = new Date().toLocaleTimeString();
-    const logEntry = `[${timestamp}] ${message}\n`;
-    
-    // Add to debug log
-    debugLog.textContent += logEntry;
-    
-    // Scroll to bottom
-    debugLog.scrollTop = debugLog.scrollHeight;
-    
-    // Also log to console
-    console.log(message);
-    
-    // Store in localStorage for debugging
-    try {
-        const existingLogs = localStorage.getItem('api-debug-logs') || '';
-        const newLogs = existingLogs + logEntry;
-        localStorage.setItem('api-debug-logs', newLogs);
-    } catch (err) {
-        console.error('Failed to store log in localStorage:', err);
-    }
-    
-    // Send to logging server
-    fetch('http://localhost:3001/api/log', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message })
-    }).catch(err => console.error('Failed to send log to server:', err));
-}
+
 
 function resetFileSelection() {
     selectedFile = null;
