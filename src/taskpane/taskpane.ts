@@ -37,6 +37,9 @@ function initializeApp() {
     
     // Initialize options
     initializeOptions();
+    
+    // Initialize export logs
+    initializeExportLogs();
 }
 
 function initializeDragAndDrop() {
@@ -78,6 +81,34 @@ function initializeConvertButton() {
 function initializeOptions() {
     // OCR toggle and language select are already handled by HTML
     // Additional initialization can be added here if needed
+}
+
+function initializeExportLogs() {
+    const exportBtn = document.getElementById('export-logs-btn') as HTMLButtonElement;
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportLogsToFile);
+    }
+}
+
+function exportLogsToFile() {
+    try {
+        const logs = localStorage.getItem('api-debug-logs') || 'No logs found';
+        const blob = new Blob([logs], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `api-debug-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.log`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showStatus('Logs exported successfully!', 'success');
+    } catch (error) {
+        console.error('Failed to export logs:', error);
+        showStatus('Failed to export logs', 'error');
+    }
 }
 
 function preventDefaults(e: Event) {
@@ -346,6 +377,15 @@ function addDebugLog(message: string) {
     
     // Also log to console
     console.log(message);
+    
+    // Store in localStorage for debugging
+    try {
+        const existingLogs = localStorage.getItem('api-debug-logs') || '';
+        const newLogs = existingLogs + logEntry;
+        localStorage.setItem('api-debug-logs', newLogs);
+    } catch (err) {
+        console.error('Failed to store log in localStorage:', err);
+    }
 }
 
 function resetFileSelection() {
