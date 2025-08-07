@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Test - Nutrient API</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📥</text></svg>">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 40px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .test-section h2 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.4em;
+        }
+        .test-section p {
+            margin: 0 0 20px 0;
+            color: #666;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background: #5a6fd8;
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .file-info {
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .file-info strong {
+            color: #155724;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📥 Download Test</h1>
+            <p>Test the download functionality of the Nutrient API</p>
+        </div>
+        
+        <div class="content">
+            <div class="test-section">
+                <h2>🧪 Test Download Endpoint</h2>
+                <p>This tests the basic download functionality using the test endpoint.</p>
+                <div class="file-info">
+                    <strong>Endpoint:</strong> /test-download<br>
+                    <strong>File:</strong> Invoice.docx<br>
+                    <strong>Expected:</strong> Direct download of DOCX file
+                </div>
+                <button class="btn" id="testDownloadBtn" onclick="testDownload()">
+                    <span class="loading hidden" id="testLoading"></span>
+                    Test Download
+                </button>
+                <div id="testStatus"></div>
+            </div>
+            
+            <div class="test-section">
+                <h2>📄 Mock API Download</h2>
+                <p>This tests the mock API download endpoint that the Convert to PDF tool uses.</p>
+                <div class="file-info">
+                    <strong>Endpoint:</strong> /api/nutrient/download/mock-test<br>
+                    <strong>File:</strong> processed-mock-test.docx<br>
+                    <strong>Expected:</strong> Download with proper headers
+                </div>
+                <button class="btn" id="testMockDownloadBtn" onclick="testMockDownload()">
+                    <span class="loading hidden" id="mockLoading"></span>
+                    Test Mock Download
+                </button>
+                <div id="mockStatus"></div>
+            </div>
+            
+            <div class="test-section">
+                <h2>🔗 Direct Download Links</h2>
+                <p>These are direct links that should trigger downloads immediately.</p>
+                <div class="file-info">
+                    <strong>Note:</strong> These links should open download dialogs in your browser
+                </div>
+                <a href="https://localhost:8080/test-download" class="btn" download="test-download.docx">
+                    ⬇️ Direct Test Download
+                </a>
+                <a href="https://localhost:8080/api/nutrient/download/mock-test" class="btn" download="processed-mock-test.docx">
+                    ⬇️ Direct Mock Download
+                </a>
+            </div>
+            
+            <div class="test-section">
+                <h2>📊 Download Status</h2>
+                <p>Check the status of download endpoints:</p>
+                <button class="btn btn-secondary" onclick="checkDownloadStatus()">
+                    Check Status
+                </button>
+                <div id="statusInfo"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = `<div class="status ${type}">${message}</div>`;
+                
+                // Auto-hide success messages after 5 seconds
+                if (type === 'success') {
+                    setTimeout(() => {
+                        if (element) {
+                            element.innerHTML = '';
+                        }
+                    }, 5000);
+                }
+            } else {
+                console.warn(`Element with id '${elementId}' not found`);
+            }
+        }
+        
+        function setLoading(buttonId, loadingId, isLoading) {
+            const button = document.getElementById(buttonId);
+            const loading = document.getElementById(loadingId);
+            
+            if (button) {
+                button.disabled = isLoading;
+            }
+            if (loading) {
+                if (isLoading) {
+                    loading.classList.remove('hidden');
+                } else {
+                    loading.classList.add('hidden');
+                }
+            }
+        }
+        
+        async function testDownload() {
+            setLoading('testDownloadBtn', 'testLoading', true);
+            showStatus('testStatus', 'Testing download endpoint...', 'info');
+            
+            try {
+                const response = await fetch('https://localhost:8080/test-download', {
+                    method: 'GET'
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'test-download.docx';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    showStatus('testStatus', `✅ Download successful! File size: ${formatFileSize(blob.size)}`, 'success');
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Download test failed:', error);
+                showStatus('testStatus', `❌ Download failed: ${error.message}`, 'error');
+            } finally {
+                setLoading('testDownloadBtn', 'testLoading', false);
+            }
+        }
+        
+        async function testMockDownload() {
+            setLoading('testMockDownloadBtn', 'mockLoading', true);
+            showStatus('mockStatus', 'Testing mock download endpoint...', 'info');
+            
+            try {
+                const response = await fetch('https://localhost:8080/api/nutrient/download/mock-test', {
+                    method: 'GET'
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'processed-mock-test.docx';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    showStatus('mockStatus', `✅ Mock download successful! File size: ${formatFileSize(blob.size)}`, 'success');
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Mock download test failed:', error);
+                showStatus('mockStatus', `❌ Mock download failed: ${error.message}`, 'error');
+            } finally {
+                setLoading('testMockDownloadBtn', 'mockLoading', false);
+            }
+        }
+        
+        async function checkDownloadStatus() {
+            showStatus('statusInfo', 'Checking download endpoints...', 'info');
+            
+            try {
+                const [testResponse, mockResponse] = await Promise.all([
+                    fetch('https://localhost:8080/test-download', { method: 'HEAD' }),
+                    fetch('https://localhost:8080/api/nutrient/download/mock-test', { method: 'HEAD' })
+                ]);
+                
+                let statusHtml = '<div class="file-info">';
+                statusHtml += `<strong>Test Download:</strong> ${testResponse.ok ? '✅ Available' : '❌ Error'}<br>`;
+                statusHtml += `<strong>Mock Download:</strong> ${mockResponse.ok ? '✅ Available' : '❌ Error'}<br>`;
+                
+                if (testResponse.ok) {
+                    const testSize = testResponse.headers.get('content-length');
+                    statusHtml += `<strong>Test File Size:</strong> ${formatFileSize(testSize)}<br>`;
+                }
+                
+                if (mockResponse.ok) {
+                    const mockSize = mockResponse.headers.get('content-length');
+                    statusHtml += `<strong>Mock File Size:</strong> ${formatFileSize(mockSize)}<br>`;
+                }
+                
+                statusHtml += '</div>';
+                
+                document.getElementById('statusInfo').innerHTML = statusHtml;
+                
+            } catch (error) {
+                showStatus('statusInfo', `❌ Status check failed: ${error.message}`, 'error');
+            }
+        }
+        
+        function formatFileSize(bytes) {
+            if (!bytes) return 'Unknown';
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>

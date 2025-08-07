@@ -8,7 +8,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Nutrient PDF Tools</title>
+    <title>Nutrient DWS API</title>
 
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
@@ -20,15 +20,80 @@
 <body class="ms-welcome">
     <!-- Header -->
     <header class="ms-welcome__header">
-        <img src="../../assets/logo-filled.png" alt="Nutrient PDF Tools" title="Nutrient PDF Tools" />
-        <h1>PDF Tools</h1>
+        <img src="../../assets/logo-filled.png" alt="Nutrient DWS API Logo" title="Nutrient DWS API" />
+        <h1>Nutrient PDF Tools</h1>
+        <p>A set of PDF tools for Microsoft Word using Nutrient DWS API</p>
     </header>
     
     <!-- Main Content -->
     <main class="ms-welcome__main">
-        <!-- PDF Import Section -->
-        <section class="feature-section">
-            <h2>Import from PDF to DOCX</h2>
+        <!-- Tools Tab (Default View) -->
+        <div id="tools-tab" class="tab-content active">
+            <div class="tools-section">
+                <div class="tools-grid">
+                    <!-- Import from PDF to DOCX Tool -->
+                    <div class="tool-card" data-tool="import">
+                        <div class="tool-icon">📥</div>
+                        <div class="tool-content">
+                            <h3>Import from PDF to DOCX</h3>
+                            <p>Convert PDF files to editable Word documents</p>
+                        </div>
+                    </div>
+
+                    <!-- Redact Document Tool -->
+                    <div class="tool-card" data-tool="redact">
+                        <div class="tool-icon">🛡️</div>
+                        <div class="tool-content">
+                            <h3>Redact Document</h3>
+                            <p>Remove sensitive information and metadata</p>
+                        </div>
+                    </div>
+
+                    <!-- Convert to PDF Tool -->
+                    <div class="tool-card" data-tool="convert-pdf">
+                        <div class="tool-icon">🔄</div>
+                        <div class="tool-content">
+                            <h3>Convert to PDF</h3>
+                            <p>Convert current Word document to PDF</p>
+                        </div>
+                    </div>
+
+                    <!-- Export to PDF/A or PDF/UA Tool -->
+                    <div class="tool-card" data-tool="export">
+                        <div class="tool-icon">📤</div>
+                        <div class="tool-content">
+                            <h3>Export to PDF/A or PDF/UA</h3>
+                            <p>Create accessible and compliant PDFs</p>
+                        </div>
+                    </div>
+
+                    <!-- Send to SharePoint/Teams Tool -->
+                    <div class="tool-card" data-tool="share">
+                        <div class="tool-icon">📡</div>
+                        <div class="tool-content">
+                            <h3>Send to SharePoint/Teams</h3>
+                            <p>Share documents to Microsoft 365</p>
+                        </div>
+                    </div>
+
+                    <!-- Settings Tool -->
+                    <div class="tool-card" data-tool="settings">
+                        <div class="tool-icon">⚙️</div>
+                        <div class="tool-content">
+                            <h3>API Settings</h3>
+                            <p>Configure Nutrient DWS API keys and preferences</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Import Tab -->
+        <div id="import-tab" class="tab-content">
+            <div class="tab-header">
+                <a href="#" class="back-link" onclick="showToolsTab()">← Back to Tools</a>
+                <h2>Import from PDF to DOCX</h2>
+            </div>
             
             <!-- File Upload Area -->
             <div class="upload-area">
@@ -87,29 +152,451 @@
 
             <!-- Status Messages -->
             <div id="status-messages" class="status-messages" role="status" aria-live="polite"></div>
+        </div>
+
+        <!-- Redact Tab -->
+        <div id="redact-tab" class="tab-content">
+            <div class="tab-header">
+                <a href="#" class="back-link" onclick="showToolsTab()">← Back to Tools</a>
+                <h2>Redact Document</h2>
+            </div>
             
+            <div class="feature-section">
+                <h2>Coming Soon</h2>
+                <p>Document redaction features will be available in a future update. It will allow you to remove sensitive information and metadata from documents.</p>
+            </div>
+        </div>
 
-        </section>
+        <!-- Convert to PDF Tab -->
+        <div id="convert-pdf-tab" class="tab-content">
+            <div class="tab-header">
+                <a href="#" class="back-link" onclick="showToolsTab()">← Back to Tools</a>
+                <h2>Convert to PDF</h2>
+            </div>
+            
+            <div class="convert-pdf-section">
+                <div class="document-info">
+                    <h4>Current Document</h4>
+                    <p id="current-doc-name">Loading document name...</p>
+                    <p id="current-doc-status">Ready to convert</p>
+                </div>
+                
+                <div class="convert-options">
+                    <div class="option-group">
+                        <label for="convert-filename">PDF Filename:</label>
+                        <input type="text" id="convert-filename" placeholder="Enter filename (will be saved as .pdf)" value="Document" />
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="convert-quality">Quality:</label>
+                        <select id="convert-quality">
+                            <option value="high">High (Print quality)</option>
+                            <option value="medium" selected>Medium (Screen quality)</option>
+                            <option value="low">Low (Web quality)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="action-section">
+                    <button id="convert-pdf-btn" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">Convert to PDF</span>
+                    </button>
+                </div>
+                
+                <!-- Progress -->
+                <div id="convert-pdf-progress" class="progress-section" style="display: none;">
+                    <div class="ms-ProgressIndicator">
+                        <div class="ms-ProgressIndicator-itemProgress">
+                            <div class="ms-ProgressIndicator-progressTrack">
+                                <div id="convert-pdf-progress-bar" class="ms-ProgressIndicator-progressBar"></div>
+                            </div>
+                        </div>
+                        <div class="ms-ProgressIndicator-itemDescription">
+                            <span id="convert-pdf-progress-text">Converting document...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Status Messages -->
+                <div id="convert-pdf-status" class="status-messages"></div>
+                
+                <!-- API Debug Section -->
+                <div id="convert-pdf-debug" class="debug-section" style="display: none;">
+                    <div class="debug-header">
+                        <h4>🔍 API Request & Response Details</h4>
+                        <button id="toggle-debug-btn" class="debug-toggle-btn">Show Details</button>
+                    </div>
+                    <div id="debug-content" class="debug-content collapsed">
+                        <div class="debug-section-item">
+                            <h5>📤 API Request</h5>
+                            <div class="debug-item">
+                                <label>URL:</label>
+                                <pre id="debug-request-url"></pre>
+                            </div>
+                            <div class="debug-item">
+                                <label>Method:</label>
+                                <pre id="debug-request-method"></pre>
+                            </div>
+                            <div class="debug-item">
+                                <label>Headers:</label>
+                                <pre id="debug-request-headers"></pre>
+                            </div>
+                            <div class="debug-item">
+                                <label>Payload:</label>
+                                <pre id="debug-request-payload"></pre>
+                            </div>
+                        </div>
+                        <div class="debug-section-item">
+                            <h5>📥 API Response</h5>
+                            <div class="debug-item">
+                                <label>Status:</label>
+                                <pre id="debug-response-status"></pre>
+                            </div>
+                            <div class="debug-item">
+                                <label>Headers:</label>
+                                <pre id="debug-response-headers"></pre>
+                            </div>
+                            <div class="debug-item">
+                                <label>Body:</label>
+                                <pre id="debug-response-body"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Download Section -->
+                <div id="convert-pdf-download" class="download-section" style="display: none;">
+                    <div class="download-header">
+                        <h4>✅ PDF Created Successfully!</h4>
+                        <p id="download-filename">Your PDF is ready for download.</p>
+                    </div>
+                    <div class="download-actions">
+                        <button id="download-pdf-btn" class="ms-Button ms-Button--primary">
+                            <span class="ms-Button-label">📥 Download PDF</span>
+                        </button>
+                        <button id="new-convert-btn" class="ms-Button ms-Button--secondary">
+                            <span class="ms-Button-label">🔄 Convert Another</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <!-- Future Features -->
-        <section class="feature-section future-features">
-            <h3>Coming Soon</h3>
-            <ul class="ms-List">
-                <li class="ms-ListItem">
-                    <i class="ms-Icon ms-Icon--Shield"></i>
-                    <span>Document Redaction</span>
-                </li>
-                <li class="ms-ListItem">
-                    <i class="ms-Icon ms-Icon--PDF"></i>
-                    <span>Export to PDF/A or PDF/UA</span>
-                </li>
-                <li class="ms-ListItem">
-                    <i class="ms-Icon ms-Icon--Share"></i>
-                    <span>Send to SharePoint/Teams</span>
-                </li>
-            </ul>
-        </section>
+        <!-- Export Tab -->
+        <div id="export-tab" class="tab-content">
+            <div class="tab-header">
+                <a href="#" class="back-link" onclick="showToolsTab()">← Back to Tools</a>
+                <h2>Export to PDF/A or PDF/UA</h2>
+            </div>
+            
+            <!-- PDF Export Options -->
+            <div class="export-options">
+                <div class="format-selection">
+                    <label class="format-option">
+                        <input type="radio" name="export-format" value="pdfa" checked />
+                        <div class="format-card">
+                            <div class="format-card-header">
+                                <div class="format-icon">📄</div>
+                                <div class="format-info">
+                                    <strong>PDF/A</strong>
+                                    <span>Long-term archiving standard</span>
+                                </div>
+                            </div>
+                            
+                            <!-- PDF/A Advanced Options -->
+                            <div class="format-advanced-options">
+                                <button class="advanced-toggle" onclick="toggleAdvancedOptions('pdfa')">
+                                    <span class="toggle-icon">▶</span>
+                                    <span class="toggle-text">PDF/A options...</span>
+                                </button>
+                                
+                                <div id="pdfa-advanced-content" class="advanced-options-content collapsed">
+                                    <div class="format-specific-options">
+                                        <h4>PDF/A Options</h4>
+                                        <div class="option-group">
+                                            <label for="pdfa-version">Version:</label>
+                                            <select id="pdfa-version">
+                                                <option value="1a">PDF/A-1a (Level A)</option>
+                                                <option value="1b">PDF/A-1b (Level B)</option>
+                                                <option value="2a">PDF/A-2a (Level A)</option>
+                                                <option value="2b">PDF/A-2b (Level B)</option>
+                                                <option value="3a">PDF/A-3a (Level A)</option>
+                                                <option value="3b">PDF/A-3b (Level B)</option>
+                                            </select>
+                                        </div>
+                                        <div class="option-group">
+                                            <label>
+                                                <input type="checkbox" id="pdfa-embed-fonts" checked />
+                                                Embed all fonts
+                                            </label>
+                                        </div>
+                                        <div class="option-group">
+                                            <label>
+                                                <input type="checkbox" id="pdfa-color-profile" checked />
+                                                Include color profile
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+                    <label class="format-option">
+                        <input type="radio" name="export-format" value="pdfua" />
+                        <div class="format-card">
+                            <div class="format-card-header">
+                                <div class="format-icon">♿</div>
+                                <div class="format-info">
+                                    <strong>PDF/UA</strong>
+                                    <span>Universal accessibility standard</span>
+                                </div>
+                            </div>
+                            
+                            <!-- PDF/UA Advanced Options -->
+                            <div class="format-advanced-options">
+                                <button class="advanced-toggle" onclick="toggleAdvancedOptions('pdfua')">
+                                    <span class="toggle-icon">▶</span>
+                                    <span class="toggle-text">PDF/UA options...</span>
+                                </button>
+                                
+                                <div id="pdfua-advanced-content" class="advanced-options-content collapsed">
+                                    <div class="format-specific-options">
+                                        <h4>PDF/UA Options</h4>
+                                        <div class="option-group">
+                                            <label>
+                                                <input type="checkbox" id="pdfua-tags" checked />
+                                                Generate document structure tags
+                                            </label>
+                                        </div>
+                                        <div class="option-group">
+                                            <label>
+                                                <input type="checkbox" id="pdfua-alt-text" checked />
+                                                Include alternative text for images
+                                            </label>
+                                        </div>
+                                        <div class="option-group">
+                                            <label>
+                                                <input type="checkbox" id="pdfua-reading-order" checked />
+                                                Ensure logical reading order
+                                            </label>
+                                        </div>
+                                        <div class="option-group">
+                                            <label>
+                                                <input type="checkbox" id="pdfua-color-contrast" checked />
+                                                Verify color contrast compliance
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- General Export Options -->
+            <div class="general-options">
+                <button class="advanced-toggle" onclick="toggleGeneralAdvanced()">
+                    <span class="toggle-icon">▶</span>
+                    <span class="toggle-text">Export Settings...</span>
+                </button>
+                
+                <div id="general-advanced-content" class="advanced-options-content collapsed">
+                    <h4>Export Settings</h4>
+                    <div class="option-group">
+                        <label for="export-filename">Filename:</label>
+                        <input type="text" id="export-filename" placeholder="Enter filename (will be saved as .pdf)" value="Document" />
+                    </div>
+                    <div class="option-group">
+                        <label for="export-quality">Quality:</label>
+                        <select id="export-quality">
+                            <option value="high">High (Print quality)</option>
+                            <option value="medium" selected>Medium (Screen quality)</option>
+                            <option value="low">Low (Web quality)</option>
+                        </select>
+                    </div>
+                    <div class="option-group">
+                        <label for="export-security">Security:</label>
+                        <select id="export-security">
+                            <option value="none" selected>No restrictions</option>
+                            <option value="password">Password protected</option>
+                            <option value="readonly">Read-only</option>
+                        </select>
+                    </div>
+                    <div id="password-section" class="option-group" style="display: none;">
+                        <label for="export-password">Password:</label>
+                        <input type="password" id="export-password" placeholder="Enter password" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Button -->
+            <div class="action-section">
+                <button id="export-btn" class="ms-Button ms-Button--primary">
+                    <span class="ms-Button-label">Export to PDF</span>
+                </button>
+            </div>
+
+            <!-- Progress -->
+            <div id="export-progress" class="progress-section" style="display: none;">
+                <div class="ms-ProgressIndicator">
+                    <div class="ms-ProgressIndicator-itemProgress">
+                        <div class="ms-ProgressIndicator-progressTrack">
+                            <div id="export-progress-bar" class="ms-ProgressIndicator-progressBar"></div>
+                        </div>
+                    </div>
+                    <div class="ms-ProgressIndicator-itemDescription">
+                        <span id="export-progress-text">Exporting document...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Messages -->
+            <div id="export-status" class="status-messages"></div>
+            
+            <!-- PDF Preview Section -->
+            <div id="pdf-preview-section" class="pdf-preview-section" style="display: none;">
+                <div class="preview-header">
+                    <h4>PDF Preview</h4>
+                    <div class="preview-actions">
+                        <button id="download-pdf-btn" class="ms-Button ms-Button--secondary">
+                            <span class="ms-Button-label">Download</span>
+                        </button>
+                        <button id="new-export-btn" class="ms-Button ms-Button--primary">
+                            <span class="ms-Button-label">New Export</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="pdf-preview-container">
+                    <iframe id="pdf-preview-iframe" src="" width="100%" height="400"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Tab -->
+        <div id="share-tab" class="tab-content">
+            <div class="tab-header">
+                <a href="#" class="back-link" onclick="showToolsTab()">← Back to Tools</a>
+                <h2>Send to SharePoint/Teams</h2>
+            </div>
+            
+            <div class="feature-section">
+                <h2>Coming Soon</h2>
+                <p>This feature is coming soon. It will allow you to share documents directly to Microsoft 365 services.</p>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings-tab" class="tab-content">
+            <div class="tab-header">
+                <a href="#" class="back-link" onclick="showToolsTab()">← Back to Tools</a>
+                <h2>API Settings</h2>
+            </div>
+            
+            <div class="settings-section">
+                <div class="api-key-section">
+                    <div class="option-group">
+                        <label for="processor-api-key">Processor API Key:</label>
+                        <div class="api-key-input-group">
+                            <input type="password" id="processor-api-key" placeholder="Enter your Processor API key" />
+                            <button type="button" id="toggle-processor-key" class="toggle-password-btn" aria-label="Show/hide API key">
+                                👁️
+                            </button>
+                            <div id="processor-key-status" class="key-status"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="viewer-api-key">Viewer API Key:</label>
+                        <div class="api-key-input-group">
+                            <input type="password" id="viewer-api-key" placeholder="Enter your Viewer API key" />
+                            <button type="button" id="toggle-viewer-key" class="toggle-password-btn" aria-label="Show/hide API key">
+                                👁️
+                            </button>
+                            <div id="viewer-key-status" class="key-status"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label for="api-base-url">API Base URL:</label>
+                        <div id="api-base-url" class="readonly-field">https://localhost:8080/api/nutrient</div>
+                    </div>
+                </div>
+                
+                <div class="settings-actions">
+                    <button id="save-settings-btn" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">Save Settings</span>
+                    </button>
+                    <button id="clear-settings-btn" class="ms-Button ms-Button--secondary">
+                        <span class="ms-Button-label">Clear All</span>
+                    </button>
+                    <button id="auth-settings-btn" class="ms-Button ms-Button--secondary" onclick="showAuthModal()">
+                        <span class="ms-Button-label">🔐 Configure Authentication</span>
+                    </button>
+                </div>
+                
+                <div class="settings-status">
+                    <div id="settings-status-message" class="status-messages"></div>
+                </div>
+            </div>
+        </div>
     </main>
+
+    <!-- Authentication Popup Modal -->
+    <div id="auth-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔐 API Authentication Required</h3>
+                <button id="close-auth-modal" class="modal-close-btn" aria-label="Close authentication modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="auth-form">
+                    <div class="auth-section">
+                        <h4>Nutrient DWS API Credentials</h4>
+                        <p>Please enter your Nutrient DWS API credentials to continue.</p>
+                        
+                        <div class="auth-field-group">
+                            <label for="auth-api-key">Processor API Key:</label>
+                            <div class="password-input-group">
+                                <input type="password" id="auth-api-key" placeholder="Enter your Processor API key" />
+                                <button type="button" id="toggle-auth-api-key" class="toggle-password-btn" aria-label="Show/hide Processor API key">
+                                    👁️
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="auth-field-group">
+                            <label for="auth-viewer-key">Viewer API Key:</label>
+                            <div class="password-input-group">
+                                <input type="password" id="auth-viewer-key" placeholder="Enter your Viewer API key" />
+                                <button type="button" id="toggle-auth-viewer-key" class="toggle-password-btn" aria-label="Show/hide Viewer API key">
+                                    👁️
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="auth-field-group">
+                            <label for="auth-api-base">API Base URL:</label>
+                            <div id="auth-api-base" class="readonly-field">https://localhost:8080/api/nutrient</div>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-actions">
+                        <button id="auth-save-btn" class="ms-Button ms-Button--primary">
+                            <span class="ms-Button-label">Save & Continue</span>
+                        </button>
+                        <button id="auth-cancel-btn" class="ms-Button ms-Button--secondary">
+                            <span class="ms-Button-label">Cancel</span>
+                        </button>
+                    </div>
+                    
+                    <div class="auth-status">
+                        <div id="auth-status-message" class="status-messages"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

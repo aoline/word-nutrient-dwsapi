@@ -1,183 +1,214 @@
 # Nutrient PDF Tools - Microsoft Word Add-in
 
-A Microsoft Word Add-in that integrates with Nutrient.io's Document Workflow Services (DWS) APIs to provide PDF conversion, redaction, OCR processing, and accessibility compliance features.
+A powerful Microsoft Word add-in that provides advanced PDF processing capabilities using the Nutrient DWS API. Convert PDFs to DOCX, create accessible PDFs, and more with enterprise-grade processing.
 
 ## 🚀 Features
 
-### Current (PoC)
-- **📥 Import from PDF to DOCX** - Convert PDF files to Word documents with OCR support
-- Drag & drop file upload
-- OCR processing toggle
-- Language selection for OCR
-- Real-time progress tracking
-- Error handling and status messages
+### Core Functionality
+- **PDF to DOCX Conversion** - Convert PDF files to editable Word documents with OCR support
+- **Word to PDF Conversion** - Convert Word documents to high-quality PDFs
+- **PDF/A & PDF/UA Export** - Create accessible and compliant PDFs
+- **Document Redaction** - Remove sensitive information and metadata (Coming Soon)
+- **SharePoint/Teams Integration** - Share documents to Microsoft 365 (Coming Soon)
 
-### Coming Soon
-- 🛡️ **Document Redaction** - Redact sensitive information
-- 📤 **Export to PDF/A or PDF/UA** - Accessibility-compliant PDF export
-- 📡 **SharePoint/Teams Integration** - Send documents to Microsoft 365 services
-
-## 🛠️ Technology Stack
-
-- **Office.js** - Microsoft Office Add-in framework
-- **TypeScript** - Type-safe JavaScript
-- **React** - UI framework (planned)
-- **Nutrient.io Build API** - PDF processing backend
-- **Nutrient.io Viewer API** - Document preview (future)
+### Advanced Features
+- **OCR Processing** - Extract text from scanned documents with multiple language support
+- **Accessibility Compliance** - Generate PDF/UA compliant documents
+- **High-Quality Output** - Multiple quality settings for different use cases
+- **Secure Processing** - Enterprise-grade security with API key authentication
 
 ## 📋 Prerequisites
 
-- Node.js (v16 or higher)
-- Microsoft Word (desktop or web)
-- Nutrient.io API keys
+- Microsoft Word (Desktop or Online)
+- Node.js 16+ and npm
+- Nutrient DWS API credentials
 
-## 🚀 Getting Started
+## 🛠️ Installation
 
-### 1. Install Dependencies
+### Development Setup
 
-```bash
-npm install
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/nutrient-io/word-nutrient-dwsapi.git
+   cd word-nutrient-dwsapi
+   ```
 
-### 2. Configure API Keys
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-The add-in is pre-configured with the provided API keys:
-- **Processor API Key**: `pdf_live_VZpbfS8lRYvhKIcA8GWgzqxvl861eKQ54QRVC4ti5Wl`
-- **Viewer API Key**: `pdf_live_7FqeZD6pwwso0fj7nZacIerdIPvejYTy0AdDjePd90S`
+3. **Configure API credentials**
+   - Open the add-in in Word
+   - Go to Settings → API Settings
+   - Enter your Nutrient DWS API credentials:
+     - Processor API Key (for PDF processing)
+     - Viewer API Key (for PDF preview)
 
-### 3. Start Development Server
+4. **Start development server**
+   ```bash
+   npm run dev-server
+   ```
 
-```bash
-npm start
-```
-
-This will:
-- Start the local web server on `https://localhost:3000`
-- Open Word and sideload the add-in
-- Enable hot reloading for development
-
-### 4. Use the Add-in
-
-1. Open Microsoft Word
-2. Go to the **Home** tab
-3. Click the **PDF Tools** button in the ribbon
-4. The taskpane will open with the PDF import interface
-
-## 📖 Usage
-
-### Import PDF to DOCX
-
-1. **Select a PDF file**:
-   - Drag and drop a PDF file onto the upload area, or
-   - Click the upload area to browse and select a file
-
-2. **Configure options**:
-   - ✅ Enable/disable OCR processing
-   - 🌐 Select language for OCR (English, Spanish, French, German, or Auto-detect)
-
-3. **Convert**:
-   - Click "Convert & Insert" to process the PDF
-   - The converted DOCX will be inserted at your cursor position in Word
-
-## 🔧 Development
-
-### Project Structure
-
-```
-word-nutrient-dwsapi/
-├── src/
-│   ├── taskpane/
-│   │   ├── taskpane.html      # Main UI
-│   │   ├── taskpane.css       # Styles
-│   │   └── taskpane.ts        # TypeScript logic
-│   └── commands/              # Ribbon commands (if needed)
-├── assets/                    # Icons and images
-├── manifest.xml              # Add-in manifest
-└── package.json              # Dependencies and scripts
-```
-
-### Available Scripts
-
-- `npm start` - Start development server and sideload add-in
-- `npm run build` - Build for production
-- `npm run dev-server` - Start dev server only
-- `npm run validate` - Validate manifest
-- `npm run sideload` - Sideload add-in to Word
-
-### API Integration
-
-The add-in integrates with Nutrient.io's Build API:
-
-```typescript
-// Example API call
-const response = await fetch('https://api.nutrient.io/build', {
-    method: 'POST',
-    headers: {
-        'Authorization': `Bearer ${PROCESSOR_API_KEY}`
-    },
-    body: formData
-});
-```
-
-**API Documentation**: https://www.nutrient.io/api/reference/public/
-
-## 🧪 Testing
-
-### Test Files
-- Use both scanned PDFs (images) and searchable PDFs (text)
-- Test various file sizes (up to 50MB limit)
-- Test different languages for OCR
-
-### Manual Testing Checklist
-- [ ] PDF file selection via drag & drop
-- [ ] PDF file selection via file picker
-- [ ] File validation (type and size)
-- [ ] OCR processing with different languages
-- [ ] Error handling for invalid files
-- [ ] Progress tracking during conversion
-- [ ] Document insertion into Word
-- [ ] Status message display
-
-## 🚀 Deployment
+5. **Load the add-in in Word**
+   ```bash
+   npm start
+   ```
 
 ### Production Build
 
-```bash
-npm run build
+1. **Build the add-in**
+   ```bash
+   npm run build
+   ```
+
+2. **Validate the manifest**
+   ```bash
+   npm run validate
+   ```
+
+## 🔧 Configuration
+
+### API Credentials
+
+The add-in requires two API keys from Nutrient.io:
+
+1. **Processor API Key** - Used for PDF processing, conversion, and OCR
+2. **Viewer API Key** - Used for PDF preview and viewing
+
+### Environment Variables
+
+- `NUTRIENT_API_BASE` - API base URL (default: `https://api.nutrient.io`)
+- `DEV_SERVER_PORT` - Development server port (default: `3000`)
+
+## 📖 Usage
+
+### Converting PDF to DOCX
+
+1. Open the Nutrient PDF Tools add-in in Word
+2. Click on "Import from PDF to DOCX"
+3. Drag and drop a PDF file or click to browse
+4. Configure OCR options (if needed)
+5. Click "Convert & Insert"
+6. The converted document will be inserted into your Word document
+
+### Converting Word to PDF
+
+1. Open the Nutrient PDF Tools add-in in Word
+2. Click on "Convert to PDF"
+3. Configure quality settings
+4. Click "Convert to PDF"
+5. Download the generated PDF
+
+### Creating Accessible PDFs
+
+1. Open the Nutrient PDF Tools add-in in Word
+2. Click on "Export to PDF/A or PDF/UA"
+3. Choose your preferred format (PDF/A or PDF/UA)
+4. Configure accessibility options
+5. Click "Export"
+6. Preview and download the accessible PDF
+
+## 🏗️ Project Structure
+
+```
+word-nutrient-dwsapi/
+├── assets/                 # Static assets (icons, images)
+├── dist/                   # Built files (generated)
+├── docs/                   # Documentation
+├── src/
+│   ├── commands/          # Office commands
+│   └── taskpane/          # Main add-in interface
+├── manifest.xml           # Office add-in manifest
+├── package.json           # Dependencies and scripts
+├── webpack.config.js      # Build configuration
+└── server.js              # Development server
 ```
 
-### Sideloading to Production
+## 🔌 API Integration
 
-1. Build the project
-2. Host the files on a web server with HTTPS
-3. Update the manifest.xml with production URLs
-4. Sideload the manifest to Word
+The add-in integrates with the Nutrient DWS API for:
 
-## 📚 API References
+- **Document Processing** - Convert between PDF and DOCX formats
+- **OCR Processing** - Extract text from scanned documents
+- **Accessibility** - Generate compliant PDFs
+- **Document Viewing** - Preview PDFs in the browser
 
-- **Office.js**: https://docs.microsoft.com/office/dev/add-ins/
-- **Nutrient.io Build API**: https://www.nutrient.io/api/reference/public/
-- **Nutrient.io Viewer API**: https://www.nutrient.io/api/reference/viewer/public/
+### API Endpoints Used
+
+- `POST /build` - Document processing and conversion
+- `POST /viewer/documents` - Document upload for viewing
+- `GET /viewer/embed` - Document preview
+
+## 🚀 Development
+
+### Available Scripts
+
+- `npm run dev-server` - Start development server
+- `npm run build` - Build for production
+- `npm run build:dev` - Build for development
+- `npm start` - Start Office add-in debugging
+- `npm run validate` - Validate manifest
+- `npm run lint` - Run linting
+- `npm run serve` - Start custom development server
+
+### Development Workflow
+
+1. Start the development server: `npm run dev-server`
+2. Start Office debugging: `npm start`
+3. Make changes to the code
+4. The add-in will automatically reload in Word
+
+### Debugging
+
+- Use browser developer tools for debugging
+- Check the browser console for detailed logs
+- Use the debug section in the add-in for API request/response details
+
+## 🔒 Security
+
+- API keys are stored locally in browser storage
+- All API requests use HTTPS
+- No sensitive data is logged or transmitted unnecessarily
+- CORS is properly configured for secure cross-origin requests
 
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Test thoroughly
+4. Add tests if applicable
 5. Submit a pull request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🆘 Support
 
-For support and questions:
-- **Documentation**: https://www.nutrient.io/api/docx-to-pdf-api/
-- **API Support**: Contact Nutrient.io support team
-- **Add-in Issues**: Create an issue in this repository
+- **Documentation**: [https://www.nutrient.io/docs](https://www.nutrient.io/docs)
+- **Support**: [https://www.nutrient.io/support](https://www.nutrient.io/support)
+- **Issues**: [GitHub Issues](https://github.com/nutrient-io/word-nutrient-dwsapi/issues)
+
+## 🗺️ Roadmap
+
+- [ ] Document redaction features
+- [ ] SharePoint/Teams integration
+- [ ] Batch processing
+- [ ] Advanced OCR options
+- [ ] Custom templates
+- [ ] Multi-language support
+
+## 📊 Version History
+
+### v1.0.0 (Current)
+- Initial release with core PDF processing features
+- PDF to DOCX conversion with OCR
+- Word to PDF conversion
+- PDF/A and PDF/UA export
+- Authentication system
+- Modern UI/UX
 
 ---
 
-**Built with ❤️ by the Nutrient.io team** 
+**Built with ❤️ by [Nutrient.io](https://www.nutrient.io)** 

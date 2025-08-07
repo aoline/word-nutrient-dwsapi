@@ -5,12 +5,14 @@
   <ProviderName>Nutrient.io</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Nutrient PDF Tools"/>
-  <Description DefaultValue="PDF conversion, redaction, OCR &amp; accessibility tools via Nutrient DWS APIs"/>
+  <Description DefaultValue="Advanced PDF processing, conversion, redaction, OCR &amp; accessibility tools powered by Nutrient DWS APIs"/>
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png"/>
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-64.png"/>
   <SupportUrl DefaultValue="https://www.nutrient.io/support"/>
   <AppDomains>
-    <AppDomain>https://api.nutrient.io</AppDomain>
+    <AppDomain>https://localhost:8080</AppDomain>
+    <AppDomain>https://viewer.nutrient.io</AppDomain>
+    <AppDomain>https://www.nutrient.io</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Document"/>
@@ -67,18 +69,18 @@
         <bt:Image id="Icon.80x80" DefaultValue="https://localhost:3000/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812"/>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://www.nutrient.io/docs"/>
         <bt:Url id="Commands.Url" DefaultValue="https://localhost:3000/commands.html"/>
         <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="GetStarted.Title" DefaultValue="Get started with Nutrient PDF Tools!"/>
+        <bt:String id="GetStarted.Title" DefaultValue="Get started with Nutrient PDF Tools for Microsoft Word!"/>
         <bt:String id="CommandsGroup.Label" DefaultValue="Nutrient PDF Tools"/>
         <bt:String id="TaskpaneButton.Label" DefaultValue="Nutrient PDF Tools"/>
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="GetStarted.Description" DefaultValue="Your Nutrient PDF Tools add-in loaded successfully. Go to the HOME tab and click the 'PDF Tools' button to start converting PDFs to DOCX."/>
-        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to open Nutrient PDF Tools"/>
+        <bt:String id="GetStarted.Description" DefaultValue="Your Nutrient PDF Tools add-in for Microsoft Word loaded successfully. Go to the HOME tab and click the 'PDF Tools' button to start processing PDFs with advanced OCR, conversion, and accessibility features."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to open Nutrient PDF Tools for Microsoft Word - Convert PDFs to DOCX, create accessible PDFs, and more"/>
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>

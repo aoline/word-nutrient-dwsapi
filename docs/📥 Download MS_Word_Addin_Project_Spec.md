@@ -109,11 +109,17 @@ POST https://api.nutrient.io/build
 
 ## API Integration Notes
 
-- Endpoint: `POST https://api.nutrient.io/build`
-- Auth: `Authorization: Bearer <API_KEY>`
-- Processor Docs: https://www.nutrient.io/api/reference/public/
-- Processor MCP Server https://github.com/PSPDFKit/nutrient-dws-mcp-server
-- Viewer Docs: https://www.nutrient.io/api/reference/viewer/public/ & 
+- **Complete API Guide**: See `docs/API_Integration_Guide.md` for tested implementations
+- **Tested Endpoints**: DOCX to PDF conversion verified with curl
+- **Authentication**: Processor API Key + Viewer API Key required
+- **FormData Format**: Use `file` field (not `document`) with proper instructions JSON
+
+### Quick Reference
+- **Build API**: `POST https://api.nutrient.io/build`
+- **Viewer API**: `POST https://api.nutrient.io/viewer/documents`
+- **Auth**: `Authorization: Bearer <API_KEY>`
+- **Processor Docs**: https://www.nutrient.io/api/reference/public/
+- **Viewer Docs**: https://www.nutrient.io/api/reference/viewer/public/
 
 **‼️ RULE:** Never assume — always verify endpoints with official docs.
 

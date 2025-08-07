@@ -1,0 +1,566 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrient DWS API Authentication Test</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #0078d4;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .auth-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .auth-section h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .auth-section p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .auth-field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .auth-field-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .auth-field-group input {
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .auth-field-group input:focus {
+            outline: none;
+            border-color: #0078d4;
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
+        }
+
+        .password-input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .password-input-group input {
+            flex: 1;
+        }
+
+        .toggle-password-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+            font-size: 16px;
+        }
+
+        .toggle-password-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .readonly-field {
+            padding: 10px 12px;
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #6b7280;
+            font-family: 'Courier New', monospace;
+        }
+
+        .auth-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: #0078d4;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #106ebe;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            color: #0078d4;
+            border: 1px solid #0078d4;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f8ff;
+            border-color: #106ebe;
+        }
+
+        .btn:disabled {
+            background: #c1c1c1;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .auth-status {
+            margin-top: 16px;
+        }
+
+        .status-messages {
+            margin-top: 16px;
+        }
+
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .status-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .status-message.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        .debug-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .debug-info h5 {
+            margin: 0 0 10px 0;
+            color: #1a1a1a;
+        }
+
+        .debug-info pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Nutrient DWS API Authentication Test</h1>
+        </div>
+        
+        <div class="content">
+            <div class="auth-form">
+                <div class="auth-section">
+                    <h4>Nutrient DWS API Credentials</h4>
+                    <p>Please enter your Nutrient DWS API credentials to test authentication.</p>
+                    
+                    <div class="auth-field-group">
+                        <label for="auth-api-key">Processor API Key:</label>
+                        <div class="password-input-group">
+                            <input type="password" id="auth-api-key" placeholder="Enter your Processor API key" />
+                            <button type="button" id="toggle-auth-api-key" class="toggle-password-btn" aria-label="Show/hide Processor API key">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-field-group">
+                        <label for="auth-viewer-key">Viewer API Key:</label>
+                        <div class="password-input-group">
+                            <input type="password" id="auth-viewer-key" placeholder="Enter your Viewer API key" />
+                            <button type="button" id="toggle-auth-viewer-key" class="toggle-password-btn" aria-label="Show/hide Viewer API key">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-field-group">
+                        <label for="auth-api-base">API Base URL:</label>
+                        <div id="auth-api-base" class="readonly-field">https://localhost:8080/api/nutrient</div>
+                    </div>
+                </div>
+                
+                <div class="auth-actions">
+                    <button id="auth-test-btn" class="btn btn-primary">
+                        Test Authentication
+                    </button>
+                    <button id="auth-clear-btn" class="btn btn-secondary">
+                        Clear Fields
+                    </button>
+                </div>
+                
+                <div class="auth-status">
+                    <div id="auth-status-message" class="status-messages"></div>
+                </div>
+
+                <div class="debug-info">
+                    <h5>Debug Information:</h5>
+                    <pre id="debug-output">Ready to test authentication...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Authentication Configuration
+        const API_BASE_URL = 'https://localhost:8080/api/nutrient';
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAuthTest();
+        });
+
+        function initializeAuthTest() {
+            // Initialize password toggles
+            const toggleApiKeyBtn = document.getElementById('toggle-auth-api-key');
+            const toggleViewerKeyBtn = document.getElementById('toggle-auth-viewer-key');
+            
+            if (toggleApiKeyBtn) {
+                toggleApiKeyBtn.addEventListener('click', () => {
+                    togglePasswordVisibility('auth-api-key', toggleApiKeyBtn);
+                });
+            }
+            
+            if (toggleViewerKeyBtn) {
+                toggleViewerKeyBtn.addEventListener('click', () => {
+                    togglePasswordVisibility('auth-viewer-key', toggleViewerKeyBtn);
+                });
+            }
+
+            // Initialize buttons
+            const testBtn = document.getElementById('auth-test-btn');
+            const clearBtn = document.getElementById('auth-clear-btn');
+
+            if (testBtn) {
+                testBtn.addEventListener('click', handleAuthTest);
+            }
+
+            if (clearBtn) {
+                clearBtn.addEventListener('click', clearFields);
+            }
+
+            // Load saved credentials if available
+            loadSavedCredentials();
+        }
+
+        function togglePasswordVisibility(inputId, button) {
+            const input = document.getElementById(inputId);
+            
+            if (input && button) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    button.textContent = '🙈';
+                } else {
+                    input.type = 'password';
+                    button.textContent = '👁️';
+                }
+            }
+        }
+
+        function loadSavedCredentials() {
+            try {
+                const saved = localStorage.getItem('nutrientAuthCredentials');
+                if (saved) {
+                    const credentials = JSON.parse(saved);
+                    
+                    const apiKeyInput = document.getElementById('auth-api-key');
+                    const viewerKeyInput = document.getElementById('auth-viewer-key');
+                    
+                    if (apiKeyInput) apiKeyInput.value = credentials.apiKey || '';
+                    if (viewerKeyInput) viewerKeyInput.value = credentials.viewerKey || '';
+                    
+                    logDebug('Loaded saved credentials from localStorage');
+                }
+            } catch (error) {
+                logDebug('Failed to load saved credentials: ' + error.message);
+            }
+        }
+
+        async function handleAuthTest() {
+            const testBtn = document.getElementById('auth-test-btn');
+            const statusMessage = document.getElementById('auth-status-message');
+            
+            // Clear previous status
+            if (statusMessage) {
+                statusMessage.innerHTML = '';
+            }
+            
+            // Disable button during test
+            if (testBtn) {
+                testBtn.disabled = true;
+                testBtn.textContent = 'Testing...';
+            }
+            
+            // Get form values
+            const apiKey = document.getElementById('auth-api-key')?.value?.trim();
+            const viewerKey = document.getElementById('auth-viewer-key')?.value?.trim();
+            
+            logDebug('Starting authentication test...');
+            logDebug('API Key length: ' + (apiKey ? apiKey.length : 0));
+            logDebug('Viewer Key length: ' + (viewerKey ? viewerKey.length : 0));
+            
+            // Validate inputs
+            if (!apiKey && !viewerKey) {
+                showAuthStatus('Please enter both Processor API Key and Viewer API Key. Both fields are required.', 'error');
+                enableTestButton();
+                return;
+            }
+            
+            if (!apiKey) {
+                showAuthStatus('Please enter your Processor API Key. This key is required for PDF processing and conversion operations.', 'error');
+                enableTestButton();
+                return;
+            }
+            
+            if (!viewerKey) {
+                showAuthStatus('Please enter your Viewer API Key. This key is required for PDF preview and viewing operations.', 'error');
+                enableTestButton();
+                return;
+            }
+            
+            try {
+                // Test credentials
+                showAuthStatus('Testing credentials...', 'info');
+                
+                const credentials = {
+                    apiKey,
+                    viewerKey,
+                    apiBaseUrl: API_BASE_URL
+                };
+                
+                // Save credentials without testing (will be validated during actual API usage)
+                localStorage.setItem('nutrientAuthCredentials', JSON.stringify(credentials));
+                
+                showAuthStatus('Credentials saved successfully! They will be validated when you use the PDF tools.', 'success');
+                logDebug('Credentials saved to localStorage');
+            } catch (error) {
+                const errorMsg = `Authentication test failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
+                showAuthStatus(errorMsg, 'error');
+                logDebug('Error during authentication test: ' + errorMsg);
+            }
+            
+            enableTestButton();
+        }
+
+        function enableTestButton() {
+            const testBtn = document.getElementById('auth-test-btn');
+            if (testBtn) {
+                testBtn.disabled = false;
+                testBtn.textContent = 'Test Authentication';
+            }
+        }
+
+        async function testAuthCredentials(credentials) {
+            try {
+                // Test with a simple API call to verify credentials using the build endpoint
+                const headers = {
+                    'Authorization': `Bearer ${credentials.apiKey}`,
+                    'Content-Type': 'application/json'
+                };
+                
+                logDebug('Testing credentials with URL: ' + `${credentials.apiBaseUrl}/build`);
+                logDebug('Using headers: ' + JSON.stringify(headers, null, 2));
+                
+                // Create a minimal test payload for the build endpoint
+                const testPayload = {
+                    parts: [{ file: "test" }],
+                    output: { type: "pdf" }
+                };
+                
+                const response = await fetch(`${credentials.apiBaseUrl}/build`, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(testPayload)
+                });
+                
+                logDebug('Response status: ' + response.status);
+                logDebug('Response status text: ' + response.statusText);
+                
+                if (response.ok) {
+                    return { success: true, message: 'Authentication successful! Your credentials are valid.' };
+                } else {
+                    const errorText = await response.text();
+                    logDebug('API Error Response: ' + errorText);
+                    
+                    if (response.status === 401) {
+                        return { 
+                            success: false, 
+                            message: `Authentication failed (401 Unauthorized). Your Processor API Key appears to be invalid. Please check that you've entered the correct API key.` 
+                        };
+                    } else if (response.status === 403) {
+                        return { 
+                            success: false, 
+                            message: `Authentication failed (403 Forbidden). Your Processor API Key may not have the required permissions. Please check your API key permissions.` 
+                        };
+                    } else if (response.status === 404) {
+                        return { 
+                            success: false, 
+                            message: `Authentication failed (404 Not Found). The API endpoint is not available. Please check that the API Base URL is correct: ${credentials.apiBaseUrl}` 
+                        };
+                    } else {
+                        return { 
+                            success: false, 
+                            message: `Authentication failed (${response.status} ${response.statusText}). Server response: ${errorText || 'No error details provided'}` 
+                        };
+                    }
+                }
+            } catch (error) {
+                logDebug('Network error during auth test: ' + error.message);
+                
+                if (error instanceof TypeError && error.message.includes('fetch')) {
+                    return { 
+                        success: false, 
+                        message: `Network error: Unable to connect to ${credentials.apiBaseUrl}. Please check your internet connection and that the API Base URL is correct.` 
+                    };
+                } else if (error instanceof TypeError && error.message.includes('CORS')) {
+                    return { 
+                        success: false, 
+                        message: `CORS error: The API server is not allowing requests from this domain. This might be a configuration issue on the server side.` 
+                    };
+                } else {
+                    return { 
+                        success: false, 
+                        message: `Network error: ${error instanceof Error ? error.message : 'Unknown network error occurred'}` 
+                    };
+                }
+            }
+        }
+
+        function showAuthStatus(message, type) {
+            const statusMessage = document.getElementById('auth-status-message');
+            if (statusMessage) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `status-message ${type}`;
+                messageDiv.textContent = message;
+                statusMessage.appendChild(messageDiv);
+                
+                // Auto-remove after 10 seconds
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 10000);
+            }
+        }
+
+        function clearFields() {
+            const apiKeyInput = document.getElementById('auth-api-key');
+            const viewerKeyInput = document.getElementById('auth-viewer-key');
+            
+            if (apiKeyInput) apiKeyInput.value = '';
+            if (viewerKeyInput) viewerKeyInput.value = '';
+            
+            const statusMessage = document.getElementById('auth-status-message');
+            if (statusMessage) {
+                statusMessage.innerHTML = '';
+            }
+            
+            logDebug('Fields cleared');
+        }
+
+        function logDebug(message) {
+            const debugOutput = document.getElementById('debug-output');
+            if (debugOutput) {
+                const timestamp = new Date().toLocaleTimeString();
+                debugOutput.textContent += `\n[${timestamp}] ${message}`;
+                debugOutput.scrollTop = debugOutput.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>
